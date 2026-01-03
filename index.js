@@ -4,16 +4,9 @@ import cors from "cors";
 
 const app = express();
 
-/* 🔓 LIBERAR CORS TOTAL */
-app.use(cors({
-  origin: "*",
-  methods: ["POST", "GET", "OPTIONS"],
-  allowedHeaders: ["Content-Type"]
-}));
-
+app.use(cors());
 app.use(express.json());
 
-/* 🔁 ROTA PIX */
 app.post("/pix", async (req, res) => {
   try {
     const { amount } = req.body;
@@ -26,7 +19,7 @@ app.post("/pix", async (req, res) => {
       },
       body: JSON.stringify({
         amount: Number(amount),
-        payerName: "Cliente Flash Contas",
+        payerName: "Cliente",
         payerDocument: "00000000000"
       })
     });
@@ -34,12 +27,11 @@ app.post("/pix", async (req, res) => {
     const data = await response.json();
     res.json(data);
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Erro ao gerar PIX" });
+  } catch (e) {
+    res.status(500).json({ error: "Erro PIX" });
   }
 });
 
-/* 🚀 START */
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("API PIX ONLINE"));
+app.listen(process.env.PORT || 3000, () => {
+  console.log("PIX BACKEND ONLINE");
+});
